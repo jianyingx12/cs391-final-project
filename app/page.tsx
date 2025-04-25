@@ -14,6 +14,7 @@ export default function Game() {
   const [autoClickers, setAutoClickers] = useState<number>(0);
   const [goldenActive, setGoldenActive] = useState<boolean>(false);
   const [hasInteracted, setHasInteracted] = useState<boolean>(false);
+  const [critMessage, setCritMessage] = useState<string | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -25,9 +26,20 @@ export default function Game() {
     }
 
     const multiplier = goldenActive ? 3 : 1;
-    const increment = clickValue * multiplier;
+    const isCritical = Math.random() < 0.1; 
+    const critBonus = isCritical ? 2 : 1;
+    const increment = clickValue * multiplier * critBonus;
     setCount((prev) => prev + increment);
     setTotalCount((prev) => prev + increment);
+
+    if (isCritical) {
+      triggerCritical(`CRITICAL +${increment}`);
+    }
+  };
+
+  const triggerCritical = (msg: string) => {
+    setCritMessage(msg);
+    setTimeout(() => setCritMessage(null), 800); 
   };
 
   const [upgrades, setUpgrades] = useState<Upgrade[]>([
@@ -105,6 +117,11 @@ export default function Game() {
         <AudioControls />
 
         <div className="relative z-10 p-6 w-full max-w-3xl">
+          {critMessage && (
+            <div className="absolute top-32 text-3xl font-bold text-yellow-400 animate-bounce">
+              {critMessage}
+            </div>
+          )}
           <Clicker
               count={count}
               totalCount={totalCount}

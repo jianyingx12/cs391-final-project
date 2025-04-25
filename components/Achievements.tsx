@@ -16,7 +16,7 @@ export default function Achievements({ totalCount, autoClickers }: AchievementsP
     ];
 
     return (
-        <div className="bg-white shadow-md rounded-lg p-4 mt-6 w-full max-w-md">
+        <div className="bg-white shadow-md rounded-lg p-4 mt-6 w-full max-w-md mx-auto">
             <h2 className="text-xl font-bold mb-2">🏆 Achievements</h2>
             <ul className="list-disc list-inside space-y-1">
                 {achievements.map((ach, index) => (
