@@ -6,6 +6,7 @@ import Shop from "@/components/Shop";
 import Achievements from "@/components/Achievements";
 import AudioControls from "@/components/AudioControls";
 import { Upgrade } from "@/components/Shop";
+import Summary from "@/components/Summary";
 
 export default function Game() {
   const [count, setCount] = useState<number>(0);
@@ -19,8 +20,12 @@ export default function Game() {
   const [critExplosionActive, setCritExplosionActive] = useState(false);
   const [critCount, setCritCount] = useState(0);
   const [totalSpent, setTotalSpent] = useState(0);
+  const [showSummary, setShowSummary] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
+
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const sessionStartTime = useRef<number>(Date.now());
 
   
   const handleClick = () => {
@@ -35,6 +40,7 @@ export default function Game() {
     const increment = clickValue * multiplier * critBonus;
     setCount((prev) => prev + increment);
     setTotalCount((prev) => prev + increment);
+    setClickCount((prev) => prev + 1);
 
     if (isCritical) {
       triggerCritical(`CRITICAL +${increment}`);
@@ -131,10 +137,16 @@ export default function Game() {
         </video>
 
         <AudioControls />
+        <button
+          onClick={() => setShowSummary(true)}
+          className="fixed bottom-5 right-5 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+        >
+          View Stats
+        </button>
 
         <div className="relative z-10 p-6 w-full max-w-3xl">
           {critMessage && (
-            <div className="absolute top-32 text-3xl font-bold text-yellow-400 animate-bounce">
+            <div className="absolute top-45 text-3xl font-bold text-yellow-400 animate-bounce">
               {critMessage}
             </div>
           )}
@@ -152,6 +164,14 @@ export default function Game() {
             autoClickers={autoClickers} 
             critCount={critCount}
             totalSpent={totalSpent}/>
+          {showSummary && (
+            <Summary
+              totalClicks={clickCount}
+              totalSpent={totalSpent}
+              timePlayed={Date.now() - sessionStartTime.current}
+              onClose={() => setShowSummary(false)}
+            />
+          )}
         </div>
       </main>
   );
