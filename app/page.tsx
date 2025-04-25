@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Clicker from "./components/Clicker";
-import Shop from "./components/Shop";
-import Achievements from "./components/Achievements";
-import AudioControls from "./components/AudioControls";
-import { Upgrade } from "./components/Shop";
+import Clicker from "@/components/Clicker";
+import Shop from "@/components/Shop";
+import Achievements from "@/components/Achievements";
+import AudioControls from "@/components/AudioControls";
+import { Upgrade } from "@/components/Shop";
 
 export default function Game() {
   const [count, setCount] = useState<number>(0);
+  const [totalCount, setTotalCount] = useState<number>(0);
   const [clickValue, setClickValue] = useState<number>(1);
   const [autoClickers, setAutoClickers] = useState<number>(0);
   const [goldenActive, setGoldenActive] = useState<boolean>(false);
@@ -16,11 +17,6 @@ export default function Game() {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const upgrades: Upgrade[] = [
-    { name: "Auto Clicker", description: "+1/sec", cost: 10 },
-    { name: "Double Click", description: "+2 per click", cost: 25 },
-    { name: "Golden Touch", description: "Triple all earnings (10s)", cost: 50 },
-  ];
 
   const handleClick = () => {
     if (!hasInteracted) {
@@ -29,11 +25,20 @@ export default function Game() {
     }
 
     const multiplier = goldenActive ? 3 : 1;
-    setCount((prev) => prev + clickValue * multiplier);
+    const increment = clickValue * multiplier;
+    setCount((prev) => prev + increment);
+    setTotalCount((prev) => prev + increment);
   };
+
+  const [upgrades, setUpgrades] = useState<Upgrade[]>([
+    { name: "Auto Clicker", description: "+1/sec", cost: 50 },
+    { name: "Click Value Up", description: "+1 per click", cost: 100 },
+    { name: "Golden Touch", description: "Triple all earnings (15s)", cost: 500 },
+  ]);
 
   const handleBuy = (index: number) => {
     const upgrade = upgrades[index];
+    if (index === 2 && goldenActive) return;
     if (count < upgrade.cost) return;
 
     setCount((prev) => prev - upgrade.cost);
@@ -43,21 +48,43 @@ export default function Game() {
         setAutoClickers((prev) => prev + 1);
         break;
       case 1:
-        setClickValue(2);
+        setClickValue((prev) => prev + 1);
         break;
       case 2:
         setGoldenActive(true);
-        setTimeout(() => setGoldenActive(false), 10000);
+        setTimeout(() => setGoldenActive(false), 15000);
         break;
     }
+
+    // Dynamically adjust scaling factors based on current state
+    const newUpgrades = upgrades.map((u, i) => {
+      if (i !== index) return u;
+
+      let scaleFactor = 1.8; // default for Auto Clicker
+      if (i === 1) scaleFactor = 2.8;
+      if (i === 2) scaleFactor = 3.5;
+
+      // increase Auto Clicker scaling after 10 owned
+      if (i === 0 && autoClickers + 1 >= 10) scaleFactor += 0.2;
+
+      return {
+        ...u,
+        cost: Math.floor(u.cost * scaleFactor),
+      };
+    });
+
+    setUpgrades(newUpgrades);
   };
+
 
   useEffect(() => {
     if (autoClickers === 0) return;
 
     const interval = setInterval(() => {
       const multiplier = goldenActive ? 3 : 1;
-      setCount((prev) => prev + autoClickers * multiplier);
+      const increment = autoClickers * multiplier;
+      setCount((prev) => prev + increment);
+      setTotalCount((prev) => prev + increment);
     }, 1000);
 
     return () => clearInterval(interval);
@@ -72,27 +99,23 @@ export default function Game() {
             playsInline
             className="absolute inset-0 w-full h-full object-cover z-0"
         >
-          <source src="/background1.mp4" type="video/mp4" />
+          <source src="/backgroundvid.mp4" type="video/mp4" />
         </video>
 
-        {/* Dark Overlay */}
-        {/*<div className="absolute inset-0 bg-black bg-opacity-50 z-0" />*/}
-
-        {/* 🔊 Audio Element */}
         <AudioControls />
 
         <div className="relative z-10 p-6 w-full max-w-3xl">
           <Clicker
               count={count}
+              totalCount={totalCount}
               clickValue={clickValue}
               autoClickers={autoClickers}
               goldenActive={goldenActive}
               onClick={handleClick}
           />
-          <Shop count={count} upgrades={upgrades} onBuy={handleBuy} />
-          <Achievements count={count} autoClickers={autoClickers} />
+          <Shop count={count} upgrades={upgrades} onBuy={handleBuy} goldenActive={goldenActive}/>
+          <Achievements totalCount={totalCount} autoClickers={autoClickers} />
         </div>
       </main>
   );
 }
-

@@ -1,17 +1,17 @@
-interface Achievement {
+type Achievement = {
     title: string;
     condition: boolean;
-}
+};
 
-interface AchievementsProps {
-    count: number;
+type AchievementsProps = {
+    totalCount: number;
     autoClickers: number;
-}
+};
 
-export default function Achievements({ count, autoClickers }: AchievementsProps) {
+export default function Achievements({ totalCount, autoClickers }: AchievementsProps) {
     const achievements: Achievement[] = [
-        { title: "🎉 Getting Started (10 Clicks)", condition: count >= 10 },
-        { title: "⚡ Click Machine (50 Clicks)", condition: count >= 50 },
+        { title: "🎉 Getting Started (10 Clicks)", condition: totalCount >= 10 },
+        { title: "⚡ Click Machine (50 Clicks)", condition: totalCount >= 50 },
         { title: "🤖 Automation Nation (5 Auto Clickers)", condition: autoClickers >= 5 },
     ];
 

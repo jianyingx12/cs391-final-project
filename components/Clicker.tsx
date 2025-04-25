@@ -1,15 +1,15 @@
-import { motion } from "framer-motion";
-
-interface ClickerProps {
+type ClickerProps = {
     count: number;
+    totalCount: number;
     clickValue: number;
     autoClickers: number;
     goldenActive: boolean;
     onClick: () => void;
-}
+};
 
 export default function Clicker({
                                     count,
+                                    totalCount,
                                     clickValue,
                                     autoClickers,
                                     goldenActive,
@@ -21,17 +21,17 @@ export default function Clicker({
         <div className="text-center space-y-4">
             <h1 className="text-4xl font-bold">Clicker Count: {count}</h1>
             <p className="text-lg text-gray-700">
+                Total Earned: <span className="font-semibold">{totalCount}</span>
+            </p>
+            <p className="text-lg text-gray-700">
                 Auto Clicks/sec: <span className="font-semibold">{autoClicksPerSecond}</span>
             </p>
-            <motion.button
-                whileTap={{ scale: 1.1 }}
+            <button
                 onClick={onClick}
-                className="px-6 py-3 bg-blue-500 text-white rounded-lg text-xl hover:bg-blue-600 transition"
+                className="px-6 py-3 bg-blue-500 text-white rounded-lg text-xl hover:bg-blue-600 active:scale-105 transition"
             >
                 Click Me! (+{clickValue * (goldenActive ? 3 : 1)})
-            </motion.button>
+            </button>
         </div>
     );
 }
-
-
