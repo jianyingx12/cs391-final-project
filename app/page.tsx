@@ -15,10 +15,14 @@ export default function Game() {
   const [goldenActive, setGoldenActive] = useState<boolean>(false);
   const [hasInteracted, setHasInteracted] = useState<boolean>(false);
   const [critMessage, setCritMessage] = useState<string | null>(null);
+  const [critChance, setCritChance] = useState<number>(0.1);
+  const [critExplosionActive, setCritExplosionActive] = useState(false);
+  const [critCount, setCritCount] = useState(0);
+  const [totalSpent, setTotalSpent] = useState(0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-
+  
   const handleClick = () => {
     if (!hasInteracted) {
       setHasInteracted(true);
@@ -26,7 +30,7 @@ export default function Game() {
     }
 
     const multiplier = goldenActive ? 3 : 1;
-    const isCritical = Math.random() < 0.1; 
+    const isCritical = critExplosionActive || (Math.random() < critChance);
     const critBonus = isCritical ? 2 : 1;
     const increment = clickValue * multiplier * critBonus;
     setCount((prev) => prev + increment);
@@ -34,6 +38,7 @@ export default function Game() {
 
     if (isCritical) {
       triggerCritical(`CRITICAL +${increment}`);
+      setCritCount((prev) => prev + 1);
     }
   };
 
@@ -45,7 +50,9 @@ export default function Game() {
   const [upgrades, setUpgrades] = useState<Upgrade[]>([
     { name: "Auto Clicker", description: "+1/sec", cost: 50 },
     { name: "Click Value Up", description: "+1 per click", cost: 100 },
+    { name: "Lucky Boost", description: "+5% Critical Chance", cost: 200 },
     { name: "Golden Touch", description: "Triple all earnings (15s)", cost: 500 },
+    { name: "Crit Explosion", description: "All clicks critical (10s)", cost: 400 },
   ]);
 
   const handleBuy = (index: number) => {
@@ -54,6 +61,8 @@ export default function Game() {
     if (count < upgrade.cost) return;
 
     setCount((prev) => prev - upgrade.cost);
+
+    setTotalSpent((prev) => prev + upgrades[index].cost);
 
     switch (index) {
       case 0:
@@ -65,6 +74,13 @@ export default function Game() {
       case 2:
         setGoldenActive(true);
         setTimeout(() => setGoldenActive(false), 15000);
+        break;
+      case 3:
+        setCritChance((prev) => Math.min(prev + 0.05, 1)); 
+        break;
+      case 4:
+        setCritExplosionActive(true);
+        setTimeout(() => setCritExplosionActive(false), 10000); 
         break;
     }
 
@@ -131,7 +147,11 @@ export default function Game() {
               onClick={handleClick}
           />
           <Shop count={count} upgrades={upgrades} onBuy={handleBuy} goldenActive={goldenActive}/>
-          <Achievements totalCount={totalCount} autoClickers={autoClickers} />
+          <Achievements 
+            totalCount={totalCount} 
+            autoClickers={autoClickers} 
+            critCount={critCount}
+            totalSpent={totalSpent}/>
         </div>
       </main>
   );

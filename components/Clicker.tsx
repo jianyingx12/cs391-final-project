@@ -19,11 +19,11 @@ export default function Clicker({
 
     return (
         <div className="text-center space-y-4">
-            <h1 className="text-4xl font-bold">Clicker Count: {count}</h1>
-            <p className="text-lg text-gray-700">
+            <h1 className="text-4xl font-bold text-white">Clicker Count: {count}</h1>
+            <p className="text-lg text-white">
                 Total Earned: <span className="font-semibold">{totalCount}</span>
             </p>
-            <p className="text-lg text-gray-700">
+            <p className="text-lg text-white">
                 Auto Clicks/sec: <span className="font-semibold">{autoClicksPerSecond}</span>
             </p>
             <button
