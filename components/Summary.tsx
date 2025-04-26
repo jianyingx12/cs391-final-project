@@ -13,21 +13,21 @@ function format(ms: number) {
 }
   
 export default function Summary({totalClicks, totalSpent, timePlayed, onClose }: SessionSummaryProps) {
-    return (
-      <main className="w-screen h-screen fixed inset-0 bg-black flex justify-center items-center z-50">
-        <div className="bg-white p-8 rounded-lg w-80 text-center">
-          <h2 className="text-2xl font-bold mb-4">Summary</h2>
-          <p className="text-lg">Total Button Clicks: {totalClicks}</p>
-          <p className="text-lg">Total Spent: {totalSpent}</p>
-          <p className="text-lg">Time Played: {format(timePlayed)}</p>
-          <button
-            onClick={onClose}
-            className="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Close
-          </button>
-        </div>
-      </main>
-    );
-  }
+  return (
+    <main className="fixed top-0 left-0 w-screen h-screen bg-black flex justify-center items-center z-50">
+      <div className="bg-white p-8 rounded-lg w-80 text-center">
+        <h2 className="text-2xl font-bold mb-4">Summary</h2>
+        <p className="text-lg">Total Button Clicks: {totalClicks}</p>
+        <p className="text-lg">Total Spent: {totalSpent}</p>
+        <p className="text-lg">Time Played: {format(timePlayed)}</p>
+        <button
+          onClick={onClose}
+          className="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Close
+        </button>
+      </div>
+    </main>
+  );
+}
   

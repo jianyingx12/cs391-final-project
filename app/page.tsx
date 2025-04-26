@@ -144,6 +144,15 @@ export default function Game() {
           View Stats
         </button>
 
+        {showSummary && (
+            <Summary
+              totalClicks={clickCount}
+              totalSpent={totalSpent}
+              timePlayed={Date.now() - sessionStartTime.current}
+              onClose={() => setShowSummary(false)}
+            />
+          )}
+
         <div className="relative z-10 p-6 w-full max-w-3xl">
           {critMessage && (
             <div className="absolute top-45 text-3xl font-bold text-yellow-400 animate-bounce">
@@ -164,14 +173,6 @@ export default function Game() {
             autoClickers={autoClickers} 
             critCount={critCount}
             totalSpent={totalSpent}/>
-          {showSummary && (
-            <Summary
-              totalClicks={clickCount}
-              totalSpent={totalSpent}
-              timePlayed={Date.now() - sessionStartTime.current}
-              onClose={() => setShowSummary(false)}
-            />
-          )}
         </div>
       </main>
   );
