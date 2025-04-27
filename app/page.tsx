@@ -61,11 +61,16 @@ export default function Game() {
 
   const handleBuy = (index: number) => {
     const upgrade = upgrades[index];
-    if (index === 2 && goldenActive) return;
+
+    // Prevent purchasing Crit Explosion if it's already active
+    if (index === 4 && critExplosionActive) return;
+
+    // Prevent purchasing Golden Touch if it's already active
+    if (index === 3 && goldenActive) return;
+
     if (count < upgrade.cost) return;
 
     setCount((prev) => prev - upgrade.cost);
-
     setTotalSpent((prev) => prev + upgrades[index].cost);
 
     switch (index) {
@@ -82,8 +87,7 @@ export default function Game() {
         setGoldenActive(true);
         setTimeout(() => setGoldenActive(false), 15000);
         break;
-
-      case 4: // Crit Buff
+      case 4: // Crit Explosion
         setCritExplosionActive(true);
         setTimeout(() => setCritExplosionActive(false), 10000);
         break;
@@ -108,6 +112,7 @@ export default function Game() {
 
     setUpgrades(newUpgrades);
   };
+
 
   useEffect(() => {
     if (autoClickers === 0) return;
