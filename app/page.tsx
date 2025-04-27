@@ -114,13 +114,14 @@ export default function Game() {
 
     const interval = setInterval(() => {
       const multiplier = goldenActive ? 3 : 1;
-      const increment = autoClickers * multiplier;
+      const increment = autoClickers * clickValue * multiplier; // Auto clickers scale by click value
       setCount((prev) => prev + increment);
       setTotalCount((prev) => prev + increment);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [autoClickers, goldenActive]);
+  }, [autoClickers, goldenActive, clickValue]);
+
 
   return (
       <main className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">

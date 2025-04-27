@@ -17,7 +17,8 @@ export default function Clicker({
                                     goldenActive,
                                     onClick,
                                 }: ClickerProps) {
-    const autoClicksPerSecond = autoClickers * (goldenActive ? 3 : 1);
+    // Calculate auto clicks per second, including clickValue and goldenActive multiplier
+    const autoClicksPerSecond = autoClickers * clickValue * (goldenActive ? 3 : 1);
 
     return (
         <div className="text-center space-y-4">
