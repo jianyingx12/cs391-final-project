@@ -150,13 +150,10 @@ export default function Game() {
           <source src="/backgroundvid.mp4" type="video/mp4" />
         </video>
 
-        <AudioControls />
-        <button
-            onClick={() => setShowSummary(true)}
-            className="fixed bottom-5 right-5 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-        >
-          View Stats
-        </button>
+        <div className="hidden md:block">
+          <AudioControls />
+        </div>
+      
 
         {showSummary && (
             <Summary
@@ -167,12 +164,7 @@ export default function Game() {
             />
         )}
 
-        <div className="relative z-10 p-6 w-full max-w-3xl">
-          {critMessage && (
-              <div className="absolute top-45 text-3xl font-bold text-yellow-400 animate-bounce">
-                {critMessage}
-              </div>
-          )}
+        <div className="relative z-10 p-6 w-full max-w-3xl flex flex-col items-center gap-4">
           <Clicker
               count={count}
               totalCount={totalCount}
@@ -182,6 +174,20 @@ export default function Game() {
               critExplosionActive={critExplosionActive}
               onClick={handleClick}
           />
+        <div className="w-full flex justify-center">
+          {critMessage && (
+            <div
+              className="
+                text-2xl font-bold text-yellow-400
+                relative mt-2
+                md:absolute md:top-20 md:mt-0 md:text-3xl
+                animate-bounce
+                "
+            >
+              {critMessage}
+            </div>
+          )}
+        </div>
           <Shop count={count} upgrades={upgrades} onBuy={handleBuy} goldenActive={goldenActive} />
           <Achievements
               totalCount={totalCount}
@@ -189,6 +195,19 @@ export default function Game() {
               critCount={critCount}
               totalSpent={totalSpent}
           />
+        <button
+          onClick={() => setShowSummary(true)}
+          className="
+          bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600
+            w-full md:w-auto
+            mt-4
+            relative
+            md:fixed md:bottom-5 md:right-5
+            "
+        >
+          View Stats
+        </button>
+
         </div>
       </main>
   );
