@@ -14,10 +14,16 @@ export default function ShopItem({
                                      disabled,
                                  }: ShopItemProps) {
     return (
-        <div className="flex justify-between items-center mb-4 p-3 bg-gray-50 rounded-lg shadow-sm">
+        <div className="
+        flex justify-between items-center 
+        mb-4 p-3 rounded-lg shadow-lg
+        
+        bg-white/10 backdrop-blur-md 
+        border border-white/20 
+        ">
             <div>
-                <div className="font-semibold text-gray-800">{name}</div>
-                <div className="text-sm text-gray-500">{description}</div>
+                <div className="font-semibold text-white-800">{name}</div>
+                <div className="text-sm text-gray-400">{description}</div>
             </div>
             <button
                 onClick={onBuy}

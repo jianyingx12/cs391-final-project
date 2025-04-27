@@ -30,7 +30,8 @@ export default function AudioControls() {
         <>
             <audio ref={audioRef} src="/bg-music.mp3" loop preload="auto" />
 
-            <div className="fixed top-5 right-5 bg-white/80 backdrop-blur-md p-4 rounded-lg shadow-md flex flex-col items-center gap-2 z-50">
+            <div className="fixed top-5 right-5 bg-white/10 backdrop-blur-md 
+        border border-white/20 p-4 rounded-lg shadow-md flex flex-col items-center gap-2 z-50">
                 <button
                     onClick={toggleAudio}
                     className="text-blue-700 font-semibold text-sm px-3 py-1 bg-blue-100 hover:bg-blue-200 rounded"
@@ -48,7 +49,7 @@ export default function AudioControls() {
                     className="w-24 accent-blue-500"
                 />
 
-                <div className="text-xs text-gray-700">
+                <div className="text-xs text-gray-300">
                     Volume: {Math.round(volume * 100)}%
                 </div>
             </div>

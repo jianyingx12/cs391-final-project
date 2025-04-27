@@ -20,11 +20,13 @@ export default function Achievements({ totalCount, autoClickers, critCount, tota
     ];
 
     return (
-        <div className="bg-white shadow-md rounded-lg p-4 mt-6 w-full max-w-md mx-auto">
-            <h2 className="text-xl font-bold mb-2 text-black">🏆 Achievements</h2>
+        <div className="shadow-md rounded-lg p-4 w-full  h-full
+        bg-white/10 backdrop-blur-md 
+        border border-white/40">
+            <h2 className="text-xl font-bold mb-2 text-white">🏆 Achievements</h2>
             <ul className="list-disc list-inside space-y-1">
                 {achievements.map((ach, index) => (
-                    <li key={index} className={ach.condition ? "text-green-600 font-semibold" : "text-gray-400"}>
+                    <li key={index} className={ach.condition ? "text-green-400 font-semibold" : "text-gray-400"}>
                         {ach.title}
                     </li>
                 ))}

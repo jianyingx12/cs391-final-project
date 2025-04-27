@@ -129,58 +129,64 @@ export default function Game() {
 
 
   return (
-      <main className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
-        {/* Golden touch overlay */}
-        {goldenActive && (
-            <div className="absolute inset-0 z-10 bg-yellow-400 opacity-30 animate-pulse pointer-events-none" />
-        )}
+    <main className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
+      {/* Golden touch overlay */}
+      {goldenActive && (
+        <div className="absolute inset-0 z-10 bg-yellow-400 opacity-30 animate-pulse pointer-events-none" />
+      )}
 
-        {/* Crit explosion overlay */}
-        {critExplosionActive && (
-            <div className="absolute inset-0 z-10 bg-red-600 opacity-50 animate-pulse pointer-events-none" />
-        )}
+      {/* Crit explosion overlay */}
+      {critExplosionActive && (
+        <div className="absolute inset-0 z-10 bg-red-600 opacity-50 animate-pulse pointer-events-none" />
+      )}
 
-        <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover z-0"
-        >
-          <source src="/backgroundvid.mp4" type="video/mp4" />
-        </video>
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      >
+        <source src="/backgroundvid.mp4" type="video/mp4" />
+      </video>
 
-        <div className="hidden md:block">
-          <AudioControls />
-        </div>
-      
+      <div className="hidden md:block">
+        <AudioControls />
+      </div>
 
-        {showSummary && (
-            <Summary
-                totalClicks={clickCount}
-                totalSpent={totalSpent}
-                timePlayed={Date.now() - sessionStartTime.current}
-                onClose={() => setShowSummary(false)}
-            />
-        )}
 
-        <div className="relative z-10 p-6 w-full max-w-3xl flex flex-col items-center gap-4">
-          <Clicker
-              count={count}
-              totalCount={totalCount}
-              clickValue={clickValue}
-              autoClickers={autoClickers}
-              goldenActive={goldenActive}
-              critExplosionActive={critExplosionActive}
-              onClick={handleClick}
+
+      {showSummary && (
+        <div className="
+        fixed inset-0 z-50 flex items-center justify-center 
+        backdrop-blur-md bg-black/30 transition-opacity duration-500 ease-in-out opacity-100">
+          <Summary
+            totalClicks={clickCount}
+            totalSpent={totalSpent}
+            timePlayed={Date.now() - sessionStartTime.current}
+            onClose={() => setShowSummary(false)}
           />
+        </div>
+      )}
+
+
+      <div className="relative z-10 p-6 w-full max-w-3xl flex flex-col items-center gap-4">
+        <Clicker
+          count={count}
+          totalCount={totalCount}
+          clickValue={clickValue}
+          autoClickers={autoClickers}
+          goldenActive={goldenActive}
+          critExplosionActive={critExplosionActive}
+          onClick={handleClick}
+        />
         <div className="w-full flex justify-center">
           {critMessage && (
             <div
               className="
-                text-2xl font-bold text-yellow-400
+                text-xl font-bold text-yellow-400
                 relative mt-2
-                md:absolute md:top-20 md:mt-0 md:text-3xl
+                md:absolute md:top-44 md:left-20 md:mt-0 md:text-xl
                 animate-bounce
                 "
             >
@@ -188,13 +194,15 @@ export default function Game() {
             </div>
           )}
         </div>
+        <div className="flex flex-col md:flex-row w-full gap-6 items-stretch">
           <Shop count={count} upgrades={upgrades} onBuy={handleBuy} goldenActive={goldenActive} />
           <Achievements
-              totalCount={totalCount}
-              autoClickers={autoClickers}
-              critCount={critCount}
-              totalSpent={totalSpent}
+            totalCount={totalCount}
+            autoClickers={autoClickers}
+            critCount={critCount}
+            totalSpent={totalSpent}
           />
+        </div>
         <button
           onClick={() => setShowSummary(true)}
           className="
@@ -208,7 +216,7 @@ export default function Game() {
           View Stats
         </button>
 
-        </div>
-      </main>
+      </div>
+    </main>
   );
 }
