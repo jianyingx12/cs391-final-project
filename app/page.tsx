@@ -179,6 +179,7 @@ export default function Game() {
               clickValue={clickValue}
               autoClickers={autoClickers}
               goldenActive={goldenActive}
+              critExplosionActive={critExplosionActive}
               onClick={handleClick}
           />
           <Shop count={count} upgrades={upgrades} onBuy={handleBuy} goldenActive={goldenActive} />

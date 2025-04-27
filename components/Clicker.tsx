@@ -6,6 +6,7 @@ type ClickerProps = {
     clickValue: number;
     autoClickers: number;
     goldenActive: boolean;
+    critExplosionActive: boolean; // Add this prop
     onClick: () => void;
 };
 
@@ -15,6 +16,7 @@ export default function Clicker({
                                     clickValue,
                                     autoClickers,
                                     goldenActive,
+                                    critExplosionActive, // Destructure this prop
                                     onClick,
                                 }: ClickerProps) {
     // Calculate auto clicks per second, including clickValue and goldenActive multiplier
@@ -40,11 +42,11 @@ export default function Clicker({
                 }}
                 transition={{ type: "spring", stiffness: 500, damping: 12 }}
                 className={`relative px-8 py-4 rounded-2xl text-2xl font-bold shadow-xl transition-all 
-        ${goldenActive ? "bg-yellow-400 text-black hover:bg-yellow-300" : "bg-blue-600 text-white hover:bg-blue-700"}`}
+        ${goldenActive ? "bg-yellow-400 text-white hover:bg-yellow-300" : critExplosionActive ? "bg-red-600 text-white hover:bg-red-700" : "bg-blue-600 text-white hover:bg-blue-700"}`}
             >
-        <span className="drop-shadow-sm">
-          ✨ Click Me! (+{clickValue * (goldenActive ? 3 : 1)}) ✨
-        </span>
+                <span className="drop-shadow-sm">
+                    ✨ Click Me! (+{clickValue * (goldenActive ? 3 : 1)}) ✨
+                </span>
                 {/* Glowing pulse ring */}
                 <motion.div
                     animate={{
