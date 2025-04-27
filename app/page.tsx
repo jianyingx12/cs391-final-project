@@ -127,6 +127,11 @@ export default function Game() {
 
   return (
       <main className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
+
+        {/*Golden touch overlay when active*/}
+        {goldenActive && (
+            <div className="absolute inset-0 z-10 bg-yellow-400 opacity-30 animate-pulse pointer-events-none" />
+        )}
         <video
             autoPlay
             muted
