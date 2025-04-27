@@ -164,6 +164,9 @@ export default function Game() {
                   totalClicks={clickCount}
                   totalSpent={totalSpent}
                   timePlayed={Date.now() - sessionStartTime.current}
+                  autoClickers={autoClickers}
+                  critChance={critChance}
+                  critMultiplier={critMultiplier}
                   onClose={() => setShowSummary(false)}
               />
             </div>
