@@ -71,20 +71,21 @@ export default function Game() {
     setTotalSpent((prev) => prev + upgrades[index].cost);
 
     switch (index) {
-      case 0:
+      case 0: // Auto Clicker
         setAutoClickers((prev) => prev + 1);
         break;
-      case 1:
+      case 1: // Update Click Value
         setClickValue((prev) => prev + 1);
         break;
-      case 2:
+      case 2: // Lucky Boost
+        setCritChance((prev) => Math.min(prev + 0.05, 1));
+        break;
+      case 3: // Golden Touch
         setGoldenActive(true);
         setTimeout(() => setGoldenActive(false), 15000);
         break;
-      case 3:
-        setCritChance((prev) => Math.min(prev + 0.05, 1)); 
-        break;
-      case 4:
+
+      case 4: // Crit Buff
         setCritExplosionActive(true);
         setTimeout(() => setCritExplosionActive(false), 10000); 
         break;
