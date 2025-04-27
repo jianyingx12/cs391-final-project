@@ -23,11 +23,9 @@ export default function Game() {
   const [showSummary, setShowSummary] = useState(false);
   const [clickCount, setClickCount] = useState(0);
 
-
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const sessionStartTime = useRef<number>(Date.now());
 
-  
   const handleClick = () => {
     if (!hasInteracted) {
       setHasInteracted(true);
@@ -50,7 +48,7 @@ export default function Game() {
 
   const triggerCritical = (msg: string) => {
     setCritMessage(msg);
-    setTimeout(() => setCritMessage(null), 800); 
+    setTimeout(() => setCritMessage(null), 800);
   };
 
   const [upgrades, setUpgrades] = useState<Upgrade[]>([
@@ -87,7 +85,7 @@ export default function Game() {
 
       case 4: // Crit Buff
         setCritExplosionActive(true);
-        setTimeout(() => setCritExplosionActive(false), 10000); 
+        setTimeout(() => setCritExplosionActive(false), 10000);
         break;
     }
 
@@ -111,7 +109,6 @@ export default function Game() {
     setUpgrades(newUpgrades);
   };
 
-
   useEffect(() => {
     if (autoClickers === 0) return;
 
@@ -127,11 +124,16 @@ export default function Game() {
 
   return (
       <main className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
-
-        {/*Golden touch overlay when active*/}
+        {/* Golden touch overlay */}
         {goldenActive && (
             <div className="absolute inset-0 z-10 bg-yellow-400 opacity-30 animate-pulse pointer-events-none" />
         )}
+
+        {/* Crit explosion overlay */}
+        {critExplosionActive && (
+            <div className="absolute inset-0 z-10 bg-red-600 opacity-50 animate-pulse pointer-events-none" />
+        )}
+
         <video
             autoPlay
             muted
@@ -144,26 +146,26 @@ export default function Game() {
 
         <AudioControls />
         <button
-          onClick={() => setShowSummary(true)}
-          className="fixed bottom-5 right-5 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+            onClick={() => setShowSummary(true)}
+            className="fixed bottom-5 right-5 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
         >
           View Stats
         </button>
 
         {showSummary && (
             <Summary
-              totalClicks={clickCount}
-              totalSpent={totalSpent}
-              timePlayed={Date.now() - sessionStartTime.current}
-              onClose={() => setShowSummary(false)}
+                totalClicks={clickCount}
+                totalSpent={totalSpent}
+                timePlayed={Date.now() - sessionStartTime.current}
+                onClose={() => setShowSummary(false)}
             />
-          )}
+        )}
 
         <div className="relative z-10 p-6 w-full max-w-3xl">
           {critMessage && (
-            <div className="absolute top-45 text-3xl font-bold text-yellow-400 animate-bounce">
-              {critMessage}
-            </div>
+              <div className="absolute top-45 text-3xl font-bold text-yellow-400 animate-bounce">
+                {critMessage}
+              </div>
           )}
           <Clicker
               count={count}
@@ -173,12 +175,13 @@ export default function Game() {
               goldenActive={goldenActive}
               onClick={handleClick}
           />
-          <Shop count={count} upgrades={upgrades} onBuy={handleBuy} goldenActive={goldenActive}/>
-          <Achievements 
-            totalCount={totalCount} 
-            autoClickers={autoClickers} 
-            critCount={critCount}
-            totalSpent={totalSpent}/>
+          <Shop count={count} upgrades={upgrades} onBuy={handleBuy} goldenActive={goldenActive} />
+          <Achievements
+              totalCount={totalCount}
+              autoClickers={autoClickers}
+              critCount={critCount}
+              totalSpent={totalSpent}
+          />
         </div>
       </main>
   );
