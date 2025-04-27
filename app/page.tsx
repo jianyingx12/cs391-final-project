@@ -22,6 +22,7 @@ export default function Game() {
   const [totalSpent, setTotalSpent] = useState(0);
   const [showSummary, setShowSummary] = useState(false);
   const [clickCount, setClickCount] = useState(0);
+  const [critMultiplier, setCritMultiplier] = useState<number>(2); // New critical multiplier state
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const sessionStartTime = useRef<number>(Date.now());
@@ -34,7 +35,7 @@ export default function Game() {
 
     const multiplier = goldenActive ? 3 : 1;
     const isCritical = critExplosionActive || (Math.random() < critChance);
-    const critBonus = isCritical ? 2 : 1;
+    const critBonus = isCritical ? critMultiplier : 1;
     const increment = clickValue * multiplier * critBonus;
     setCount((prev) => prev + increment);
     setTotalCount((prev) => prev + increment);
@@ -57,27 +58,28 @@ export default function Game() {
     { name: "Lucky Boost", description: "+5% Critical Chance", cost: 200 },
     { name: "Golden Touch", description: "Triple all earnings (15s)", cost: 500 },
     { name: "Crit Explosion", description: "All clicks critical (10s)", cost: 400 },
+    { name: "Critical Power", description: "+1x Critical Multiplier", cost: 300 },
   ]);
 
   const handleBuy = (index: number) => {
     const upgrade = upgrades[index];
 
-    // Prevent purchasing Crit Explosion if it's already active
+    // Prevent purchasing Crit Explosion if already active
     if (index === 4 && critExplosionActive) return;
 
-    // Prevent purchasing Golden Touch if it's already active
+    // Prevent purchasing Golden Touch if already active
     if (index === 3 && goldenActive) return;
 
     if (count < upgrade.cost) return;
 
     setCount((prev) => prev - upgrade.cost);
-    setTotalSpent((prev) => prev + upgrades[index].cost);
+    setTotalSpent((prev) => prev + upgrade.cost);
 
     switch (index) {
       case 0: // Auto Clicker
         setAutoClickers((prev) => prev + 1);
         break;
-      case 1: // Update Click Value
+      case 1: // Click Value Up
         setClickValue((prev) => prev + 1);
         break;
       case 2: // Lucky Boost
@@ -91,6 +93,9 @@ export default function Game() {
         setCritExplosionActive(true);
         setTimeout(() => setCritExplosionActive(false), 10000);
         break;
+      case 5: // Critical Power
+        setCritMultiplier((prev) => prev + 1);
+        break;
     }
 
     // Dynamically adjust scaling factors based on current state
@@ -99,7 +104,8 @@ export default function Game() {
 
       let scaleFactor = 1.8; // default for Auto Clicker
       if (i === 1) scaleFactor = 2.8;
-      if (i === 2) scaleFactor = 3.5;
+      if (i === 2) scaleFactor = 3.3;
+      if (i === 5) scaleFactor = 3.2; // Critical Power specific scaling
 
       // increase Auto Clicker scaling after 10 owned
       if (i === 0 && autoClickers + 1 >= 10) scaleFactor += 0.2;
@@ -113,13 +119,12 @@ export default function Game() {
     setUpgrades(newUpgrades);
   };
 
-
   useEffect(() => {
     if (autoClickers === 0) return;
 
     const interval = setInterval(() => {
       const multiplier = goldenActive ? 3 : 1;
-      const increment = autoClickers * clickValue * multiplier; // Auto clickers scale by click value
+      const increment = autoClickers * clickValue * multiplier;
       setCount((prev) => prev + increment);
       setTotalCount((prev) => prev + increment);
     }, 1000);
@@ -127,96 +132,76 @@ export default function Game() {
     return () => clearInterval(interval);
   }, [autoClickers, goldenActive, clickValue]);
 
-
   return (
-    <main className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
-      {/* Golden touch overlay */}
-      {goldenActive && (
-        <div className="absolute inset-0 z-10 bg-yellow-400 opacity-30 animate-pulse pointer-events-none" />
-      )}
+      <main className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
+        {/* Golden touch overlay */}
+        {goldenActive && (
+            <div className="absolute inset-0 z-10 bg-yellow-400 opacity-30 animate-pulse pointer-events-none" />
+        )}
 
-      {/* Crit explosion overlay */}
-      {critExplosionActive && (
-        <div className="absolute inset-0 z-10 bg-red-600 opacity-50 animate-pulse pointer-events-none" />
-      )}
+        {/* Crit explosion overlay */}
+        {critExplosionActive && (
+            <div className="absolute inset-0 z-10 bg-red-600 opacity-50 animate-pulse pointer-events-none" />
+        )}
 
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0"
-      >
-        <source src="/backgroundvid.mp4" type="video/mp4" />
-      </video>
-
-      <div className="hidden md:block">
-        <AudioControls />
-      </div>
-
-
-
-      {showSummary && (
-        <div className="
-        fixed inset-0 z-50 flex items-center justify-center 
-        backdrop-blur-md bg-black/30 transition-opacity duration-500 ease-in-out opacity-100">
-          <Summary
-            totalClicks={clickCount}
-            totalSpent={totalSpent}
-            timePlayed={Date.now() - sessionStartTime.current}
-            onClose={() => setShowSummary(false)}
-          />
-        </div>
-      )}
-
-
-      <div className="relative z-10 p-6 w-full max-w-3xl flex flex-col items-center gap-4">
-        <Clicker
-          count={count}
-          totalCount={totalCount}
-          clickValue={clickValue}
-          autoClickers={autoClickers}
-          goldenActive={goldenActive}
-          critExplosionActive={critExplosionActive}
-          onClick={handleClick}
-        />
-        <div className="w-full flex justify-center">
-          {critMessage && (
-            <div
-              className="
-                text-xl font-bold text-yellow-400
-                relative mt-2
-                md:absolute md:top-44 md:left-20 md:mt-0 md:text-xl
-                animate-bounce
-                "
-            >
-              {critMessage}
-            </div>
-          )}
-        </div>
-        <div className="flex flex-col md:flex-row w-full gap-6 items-stretch">
-          <Shop count={count} upgrades={upgrades} onBuy={handleBuy} goldenActive={goldenActive} />
-          <Achievements
-            totalCount={totalCount}
-            autoClickers={autoClickers}
-            critCount={critCount}
-            totalSpent={totalSpent}
-          />
-        </div>
-        <button
-          onClick={() => setShowSummary(true)}
-          className="
-          bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600
-            w-full md:w-auto
-            mt-4
-            relative
-            md:fixed md:bottom-5 md:right-5
-            "
+        <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover z-0"
         >
-          View Stats
-        </button>
+          <source src="/backgroundvid.mp4" type="video/mp4" />
+        </video>
 
-      </div>
-    </main>
+        <div className="hidden md:block">
+          <AudioControls />
+        </div>
+
+        {showSummary && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/30 transition-opacity duration-500 ease-in-out opacity-100">
+              <Summary
+                  totalClicks={clickCount}
+                  totalSpent={totalSpent}
+                  timePlayed={Date.now() - sessionStartTime.current}
+                  onClose={() => setShowSummary(false)}
+              />
+            </div>
+        )}
+
+        <div className="relative z-10 p-6 w-full max-w-3xl flex flex-col items-center gap-4">
+          <Clicker
+              count={count}
+              totalCount={totalCount}
+              clickValue={clickValue}
+              autoClickers={autoClickers}
+              goldenActive={goldenActive}
+              critExplosionActive={critExplosionActive}
+              onClick={handleClick}
+          />
+          <div className="w-full flex justify-center">
+            {critMessage && (
+                <div className="text-xl font-bold text-yellow-400 relative mt-2 md:absolute md:top-44 md:left-20 md:mt-0 md:text-xl animate-bounce">
+                  {critMessage}
+                </div>
+            )}
+          </div>
+          <div className="flex flex-col md:flex-row w-full gap-6 items-stretch">
+            <Shop count={count} upgrades={upgrades} onBuy={handleBuy} goldenActive={goldenActive} />
+            <Achievements
+                totalCount={totalCount}
+                autoClickers={autoClickers}
+                critCount={critCount}
+                totalSpent={totalSpent}
+            />
+          </div>
+          <button
+              onClick={() => setShowSummary(true)}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full md:w-auto mt-4 relative md:fixed md:bottom-5 md:right-5"
+          >
+            View Stats
+          </button>
+        </div>
+      </main>
   );
 }
