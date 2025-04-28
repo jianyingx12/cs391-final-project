@@ -1,3 +1,9 @@
+/**
+ * Author: Albert Zhang
+ * Added glass visual to the component
+ * Made text contrast against background
+ */
+
 type SessionSummaryProps = {
     totalClicks: number;
     totalSpent: number;
