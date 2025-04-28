@@ -28,13 +28,10 @@ export default function Game() {
   const sessionStartTime = useRef<number>(Date.now());
 
   const handleClick = () => {
-    const clickSound = new Audio("/click.wav");
     if (!hasInteracted) {
       setHasInteracted(true);
       audioRef.current?.play();
     }
-    clickSound.currentTime = 0;
-    clickSound.play();
 
     const multiplier = goldenActive ? 3 : 1;
     const isCritical = critExplosionActive || (Math.random() < critChance);
@@ -45,8 +42,16 @@ export default function Game() {
     setClickCount((prev) => prev + 1);
 
     if (isCritical) {
+      const critSound = new Audio("/crit.mp3");
+      critSound.currentTime = 0;
+      critSound.play();
+
       triggerCritical(`CRITICAL +${increment}`);
       setCritCount((prev) => prev + 1);
+    } else {
+      const clickSound = new Audio("/click.wav");
+      clickSound.currentTime = 0;
+      clickSound.play();
     }
   };
 
