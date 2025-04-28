@@ -1,11 +1,20 @@
+/**
+ * Author: John (Jack) Kinney
+ * Purpose: display individual shop item
+ * - shows item details.
+ * - allows buying (if not disabled)
+ * - distinguishes visually if an item is available / vs unavailable
+ */
+
 type ShopItemProps = {
-    name: string;
-    description: string;
-    cost: number;
-    onBuy: () => void;
-    disabled: boolean;
+    name: string; // upgrade name
+    description: string; // upgrade description
+    cost: number; // upgrade cost
+    onBuy: () => void; // used when purchasing upgrade
+    disabled: boolean; // whether the upgrade's purchase button should be active/inactive
 };
 
+// renders an individual item in the shop
 export default function ShopItem({
                                      name,
                                      description,

@@ -1,3 +1,10 @@
+/**
+ * Author: John (Jack) Kinney
+ * Purpose: display list of shop upgrades based on player stats
+ * - Highlights upgrades: shows available upgrades normally,
+ * - and disable those that cannot afford, or are already active (ex. golden touch status is active)
+ */
+
 import ShopItem from "./ShopItem";
 
 export type Upgrade = {
@@ -7,12 +14,13 @@ export type Upgrade = {
 };
 
 type ShopProps = {
-    count: number;
-    upgrades: Upgrade[];
-    onBuy: (index: number) => void;
-    goldenActive: boolean;
+    count: number; // player's current amount of clicks/currency
+    upgrades: Upgrade[]; // the list of available upgrades that can be purchased
+    onBuy: (index: number) => void; // used when purchasing upgrade
+    goldenActive: boolean; // whether golden touch upgrade is already active
 };
 
+// displays upgrades in styled container, mapping over each upgrade
 export default function Shop({ count, upgrades, onBuy, goldenActive}: ShopProps) {
     return (
         <div className="bg-white/10 
