@@ -26,12 +26,15 @@ export default function Game() {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const sessionStartTime = useRef<number>(Date.now());
+  const clickSound = new Audio("/click.wav");
 
   const handleClick = () => {
     if (!hasInteracted) {
       setHasInteracted(true);
       audioRef.current?.play();
     }
+    clickSound.currentTime = 0;
+    clickSound.play();
 
     const multiplier = goldenActive ? 3 : 1;
     const isCritical = critExplosionActive || (Math.random() < critChance);
