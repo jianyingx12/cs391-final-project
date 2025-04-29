@@ -26,6 +26,7 @@ export default function Achievements({ totalCount, autoClickers, critCount, tota
         { title: "🌟 Crit Master (100 Criticals)", condition: critCount >= 100 },
         { title: "💵 Big Spender (Spend 10,000 Clicks)", condition: totalSpent >= 10000 },
         { title: "🤖 Automation Nation (5 Auto Clickers)", condition: autoClickers >= 5 },
+        { title: "🤑 Millionaire (Spend 1,000,000 Clicks)", condition: totalSpent >= 1000000 },
     ];
 
     return (
