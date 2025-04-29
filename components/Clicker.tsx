@@ -15,7 +15,7 @@ type ClickerProps = {
     autoClickers: number; // number of auto clickers purchased
     goldenActive: boolean; // golden touch is active or not
     critExplosionActive: boolean; // crit explosion active or not
-    onClick: () => void;
+    onClick: () => void; 
 };
 
 export default function Clicker({
@@ -32,7 +32,7 @@ export default function Clicker({
     const autoClicksPerSecond = autoClickers * clickValue * (goldenActive ? 3 : 1);
 
     return (
-        <div className="text-center"> {/* container for all clicker info */}
+        <div className="text-center">
             <h1 className="text-4xl font-bold text-white">Clicker Count: {count}</h1>
             <p className="text-lg text-white">
                 Total Earned: <span className="font-semibold">{totalCount}</span>
@@ -44,31 +44,33 @@ export default function Clicker({
             {/* Button with framer motion animations */}
             <motion.button
                 onClick={onClick}
-                whileTap={{ scale: 0.9, rotate: -5 }} // animation when tapping
+                whileTap={{ scale: 0.9, rotate: -5 }}
                 whileHover={{
-                    scale: 1.08, // scale up when hovering
+                    scale: 1.08,
                 }}
-                transition={{ type: "spring", stiffness: 500, damping: 100 }} // spring movement
-                className={`px-8 py-4 rounded-2xl text-2xl font-bold shadow-xl transition-all 
-                ${goldenActive ? "bg-yellow-400 text-white hover:bg-yellow-300" // color change on mode
-                    : critExplosionActive ? "bg-red-600 text-white hover:bg-red-700" 
-                    : "bg-blue-600 text-white hover:bg-blue-700"}`} 
+                transition={{ type: "spring", stiffness: 500, damping: 12 }}
+                className={`relative px-8 py-4 rounded-2xl text-2xl font-bold shadow-xl transition-all 
+                ${goldenActive ? "bg-yellow-400 text-white hover:bg-yellow-300" : 
+                    critExplosionActive ? "bg-red-600 text-white hover:bg-red-700" 
+                    : "bg-blue-600 text-white hover:bg-blue-700"}`}
+
+
             >
-                <span className="drop-shadow-sm">
+                <span>
                     ✨ Click Me! (+{clickValue * (goldenActive ? 3 : 1)}) ✨
                 </span>
-                {/* pulse ring for button */}
+                {/* Glowing pulse ring */}
                 <motion.div
                     animate={{
                         scale: [1, 1.2, 1], // grow and shrink
                         opacity: [0.6, 0, 0.6], // fade
                     }}
                     transition={{
-                        repeat: Infinity, // loop
-                        duration: 1.5, // 1 pulse 
-                        ease: "easeInOut", 
+                        repeat: Infinity,
+                        duration: 1.5, // 1 pulse
+                        ease: "easeInOut",
                     }}
-                    className="rounded-2xl border-4 border-blue-400 opacity-50"
+                    className="absolute inset-0 rounded-2xl border-4 border-blue-400 opacity-50"
                 />
             </motion.button>
         </div>
