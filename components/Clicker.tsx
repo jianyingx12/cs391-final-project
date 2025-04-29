@@ -32,7 +32,7 @@ export default function Clicker({
     const autoClicksPerSecond = autoClickers * clickValue * (goldenActive ? 3 : 1);
 
     return (
-        <div className="text-center">
+        <div className="text-center space-y-4">
             <h1 className="text-4xl font-bold text-white">Clicker Count: {count}</h1>
             <p className="text-lg text-white">
                 Total Earned: <span className="font-semibold">{totalCount}</span>
