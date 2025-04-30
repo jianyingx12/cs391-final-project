@@ -10,8 +10,8 @@ import { useRef, useState } from "react";
 export default function AudioControls() {
     // useRef creates a persistent reference that survives re-renders
     const audioRef = useRef<HTMLAudioElement | null>(null); // HTMLAudioElement refers to the <audio> DOM element
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [volume, setVolume] = useState(0.5);
+    const [isPlaying, setIsPlaying] = useState(false); // Checks if the audio is playing or not
+    const [volume, setVolume] = useState(0.5); // Changes the volume based on the slider
 
     // Pause and play the audio
     const toggleAudio = () => {
@@ -22,7 +22,7 @@ export default function AudioControls() {
             audio.pause();
         } else {
             audio.volume = volume; // .volume sets the playback volume of the audio element
-            audio.play().catch(() => {});
+            audio.play().catch(() => {}); // Catch any errors from the play
         }
         setIsPlaying(!isPlaying);
     };
@@ -63,6 +63,7 @@ export default function AudioControls() {
 
                 {/* Current volume percentage */}
                 <div className="text-xs text-gray-300">
+                    {/* Round the volume percentage */}
                     Volume: {Math.round(volume * 100)}%
                 </div>
             </div>
